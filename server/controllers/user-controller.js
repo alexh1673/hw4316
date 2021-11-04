@@ -16,6 +16,19 @@ getLoggedIn = async (req, res) => {
     })
 }
 
+loginUser = async (req, res) => {
+    const {email,password} = req.body;
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    console.log("asdasdasdfasdf")
+    const loggedInUser = await User.findOne({ email: req.email });
+    if(loggedInUser.password === passwordHash){
+        console.log("asdasdasdfasdf222222")
+    }
+}
+
 registerUser = async (req, res) => {
     try {
         const { firstName, lastName, email, password, passwordVerify } = req.body;
@@ -80,5 +93,6 @@ registerUser = async (req, res) => {
 
 module.exports = {
     getLoggedIn,
-    registerUser
+    registerUser,
+    loginUser
 }

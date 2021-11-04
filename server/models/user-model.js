@@ -8,6 +8,7 @@ const UserSchema = new Schema(
         lastName: { type: String, required: true },
         email: { type: String, required: true },
         passwordHash: { type: String, required: true }
+        //have an array of object ids
     },
     { timestamps: true },
 )
