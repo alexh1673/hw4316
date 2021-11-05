@@ -18,14 +18,31 @@ getLoggedIn = async (req, res) => {
 
 loginUser = async (req, res) => {
     const {email,password} = req.body;
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const passwordHash = await bcrypt.hash(password, salt);
+    console.log("email: " + email);
+    let user1 = await User.findOne({ email: email });
+    console.log("user: " + JSON.stringify(user1));
+    try{
+        let truth = await bcrypt.compare(password, user1.passwordHash);
+        console.log(truth)
+        const token = auth.signToken(user1);
 
-    console.log("asdasdasdfasdf")
-    const loggedInUser = await User.findOne({ email: req.email });
-    if(loggedInUser.password === passwordHash){
-        console.log("asdasdasdfasdf222222")
+        if(truth){
+            await res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none"
+            }).status(200).json({
+                success: true,
+                user: {
+                    firstName: user1.firstName,
+                    lastName: user1.lastName,
+                    email: user1.email
+                }
+            }).send();
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
     }
 }
 
