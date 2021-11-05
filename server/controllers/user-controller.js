@@ -17,11 +17,14 @@ getLoggedIn = async (req, res) => {
 }
 
 loginUser = async (req, res) => {
-    const {email,password} = req.body;
-    console.log("email: " + email);
-    let user1 = await User.findOne({ email: email });
-    console.log("user: " + JSON.stringify(user1));
     try{
+        const {email,password} = req.body;
+        if (!email || !password) {
+            return res
+                .status(400)
+                .json({ errorMessage: "Please enter all required fields." });
+        }
+        let user1 = await User.findOne({ email: email });
         let truth = await bcrypt.compare(password, user1.passwordHash);
         console.log(truth)
         const token = auth.signToken(user1);

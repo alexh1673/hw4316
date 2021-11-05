@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store';
 import { useContext } from 'react';
+import ErrorModal from './ErrorModal';
 
 function Copyright(props) {
   return (
@@ -52,6 +53,7 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        <ErrorModal/>
         <CssBaseline />
         <Box
           sx={{
