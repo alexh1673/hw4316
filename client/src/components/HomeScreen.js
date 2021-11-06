@@ -5,6 +5,8 @@ import { Fab, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import List from '@mui/material/List';
 import  AuthContext  from '../auth';
+import DeleteModal from './DeleteModal'
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -21,6 +23,7 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+
     let listCard = "";
     if (store) {
         listCard = 
@@ -54,7 +57,8 @@ const HomeScreen = () => {
                     listCard
                 }
             </div>
-        </div>)
+            <DeleteModal/>
+        </div>);
 }
 
 export default HomeScreen;
