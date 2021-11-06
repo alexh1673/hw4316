@@ -48,6 +48,7 @@ export default function SignIn() {
         email: data.get('email'),
         password: data.get('password'),
     }, store);
+    console.log("the first name" + auth.firstName)
   };
 
   return (

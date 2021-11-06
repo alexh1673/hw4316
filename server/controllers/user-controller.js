@@ -25,10 +25,20 @@ loginUser = async (req, res) => {
                 .json({ errorMessage: "Please enter all required fields." });
         }
         let user1 = await User.findOne({ email: email });
+        if(user1 == null)
+        {
+            return res
+                .status(400)
+                .json({ errorMessage: "Invalid username or password" });
+        }
         let truth = await bcrypt.compare(password, user1.passwordHash);
+        if (!truth) {
+            return res
+                .status(400)
+                .json({ errorMessage: "Invalid username or password" });
+        }
         console.log(truth)
         const token = auth.signToken(user1);
-
         if(truth){
             await res.cookie("token", token, {
                 httpOnly: true,
