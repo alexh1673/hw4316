@@ -81,7 +81,6 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
-        console.log(auth)
         if(!loggedIn){
         return <AccountCircle />;
         }
