@@ -15,6 +15,7 @@ function Top5Item(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [draggedTo, setDraggedTo] = useState(0);
+    const [text, setText] = useState("");
 
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
@@ -55,6 +56,50 @@ function Top5Item(props) {
         itemClass = "top5-item-dragged-to";
     }
 
+    function toggleEdit() {
+        let newActive = !editActive;
+        if (newActive) {
+            store.setIsItemEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleKeyPress(event) {
+        console.log(props.index)
+        if (event.code === "Enter") {
+            let index = props.index;
+            let text = event.target.value;
+            store.addUpdateItemTransaction(index, text);
+            toggleEdit();
+        }
+    }
+
+    function handleUpdateText(event) {
+        setText(event.target.value);
+        //setText(event.target.value);
+    }
+
+    if(editActive)
+    {
+        return(<TextField
+            margin="normal"
+            required
+            fullWidth
+            id={index}
+            label="Top 5 List Name"
+            name="name"
+            autoComplete="Top 5 List Name"
+            className='list-card'
+            onKeyPress={handleKeyPress}
+            onChange={handleUpdateText}
+            defaultValue={props.text}
+            inputProps={{style: {fontSize: 48}}}
+            InputLabelProps={{style: {fontSize: 24}}}
+            autoFocus
+        />
+        )
+    }
+    else
     return (
             <ListItem
                 id={'item-' + (index+1)}
@@ -84,7 +129,7 @@ function Top5Item(props) {
             >
             <Box sx={{ p: 1 }}>
                 <IconButton aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}}  />
+                    <EditIcon style={{fontSize:'48pt'}}  onClick = {toggleEdit}/>
                 </IconButton>
             </Box>
                 <Box sx={{ p: 1, flexGrow: 1 }}>{props.text}</Box>
