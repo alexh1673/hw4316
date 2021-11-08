@@ -296,17 +296,20 @@ function GlobalStoreContextProvider(props) {
                 history.push("/top5list/" + top5List._id);
             }
         }
+        store.unre()
     }
 
     store.addMoveItemTransaction = function (start, end) {
         let transaction = new MoveItem_Transaction(store, start, end);
         tps.addTransaction(transaction);
+        store.unre()
     }
 
     store.addUpdateItemTransaction = function (index, newText) {
         let oldText = store.currentList.items[index];
         let transaction = new UpdateItem_Transaction(store, index, oldText, newText);
         tps.addTransaction(transaction);
+        store.unre()
     }
 
     store.moveItem = function (start, end) {
@@ -348,10 +351,12 @@ function GlobalStoreContextProvider(props) {
 
     store.undo = function () {
         tps.undoTransaction();
+        store.unre()
     }
 
     store.redo = function () {
         tps.doTransaction();
+        store.unre()
     }
 
     store.canUndo = function() {
@@ -360,6 +365,22 @@ function GlobalStoreContextProvider(props) {
 
     store.canRedo = function() {
         return tps.hasTransactionToRedo();
+    }
+
+    store.unre = function(){
+        let s = document.getElementById('undo-button')
+        s.classList.add("top5-button-disabled")
+        let r = document.getElementById('redo-button')
+        r.classList.add("top5-button-disabled")
+        if(tps.hasTransactionToRedo())
+        {
+            r.classList.remove("top5-button-disabled")
+        }
+        if(tps.hasTransactionToUndo())
+        {
+            s.classList.remove("top5-button-disabled")
+        }
+
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
